@@ -2,29 +2,37 @@ import { Controller } from "@hotwired/stimulus"
 import shuffle from "../utils/shuffle"
 
 export default class extends Controller {
-  static targets = ["finishMessage"]
+  static targets = ["board", "finishMessage"]
   static values = { numbers: Array }
 
   initialize() {
-    this.rows = 3
-    this.cols = 4
+    this.rows = 2
+    this.cols = 3
     this.numbersValue = [...Array(this.cellsNumber / 2 + 1).keys()].slice(1)
+    this.open = null
   }
 
   connect() {
-    this.element.appendChild(this.createBoard())
+    this.boardTarget.appendChild(this.createBoard())
   }
 
   get cellsNumber() {
     return this.rows * this.cols
   }
 
+  get hasOpenCell() {
+    return this.open !== null
+  }
+
+  /*
+    callbacks
+  */
+
   numbersValueChanged(value, previousValue) {
+    // game is over
     if (previousValue && value.length === 0) {
-      const t = this.finishMessageTarget
-      t.classList.remove("d-none")
-      t.remove()
-      this.element.querySelector(".board").appendChild(t)
+      let messageElem = this.finishMessageTarget
+      messageElem.classList.remove("d-none")
     }
   }
 
@@ -35,37 +43,18 @@ export default class extends Controller {
   handleClick(e) {
     let elem = e.target
 
-    if (
-      !elem.classList.contains("cell") ||
-      elem.classList.contains("done") ||
-      elem.classList.contains("flip")
-    )
-      return
+    if (this.wrongTarget(elem)) return
 
-    if (this.open) {
-      // has open cell
-      if (this.open.textContent === elem.textContent) {
-        // success
-        elem.classList.add("flip", "done")
-        this.open.classList.add("done")
-        this.open = null
-        this.numbersValue = this.numbersValue.filter(
-          n => n !== Number(elem.textContent)
-        )
-      } else {
-        // fail
-        this.open.classList.remove("flip")
-        this.open = null
-      }
+    if (this.hasOpenCell) {
+      this.checkGuess(elem)
     } else {
-      // no open
       elem.classList.add("flip")
       this.open = elem
     }
   }
 
   /*
-    methods
+    private methods
   */
 
   createBoard() {
@@ -74,20 +63,52 @@ export default class extends Controller {
     board.setAttribute("data-action", "click->game#handleClick")
     board.classList.add("board")
 
+    console.info(data)
+
     for (let i = 0; i < this.rows; i++) {
       let row = document.createElement("div")
       row.classList.add("row")
 
-      for (let j = 0; j < this.cols; j++) {
-        let cell = document.createElement("div")
-        cell.classList.add("cell")
-        cell.textContent = data.shift()
-        row.appendChild(cell)
-      }
+      this.createAndInsertCell(row, data)
+
+      console.info(data)
 
       board.appendChild(row)
     }
 
     return board
+  }
+
+  createAndInsertCell(row, data) {
+    for (let j = 0; j < this.cols; j++) {
+      let cell = document.createElement("div")
+      cell.classList.add("cell")
+      cell.textContent = data.shift()
+      row.appendChild(cell)
+    }
+  }
+
+  wrongTarget(elem) {
+    return (
+      !elem.classList.contains("cell") ||
+      elem.classList.contains("done") ||
+      elem.classList.contains("flip")
+    )
+  }
+
+  checkGuess(elem) {
+    if (this.open.textContent === elem.textContent) {
+      // success
+      elem.classList.add("flip", "done")
+      this.open.classList.add("done")
+      this.open = null
+      this.numbersValue = this.numbersValue.filter(
+        n => n !== Number(elem.textContent)
+      )
+    } else {
+      // fail
+      this.open.classList.remove("flip")
+      this.open = null
+    }
   }
 }
