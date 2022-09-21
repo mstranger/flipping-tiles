@@ -1,3 +1,64 @@
 body {
   font-family: Helvetica, Arial, sans-serif;
 }
+
+.container {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.board {
+  position: relative;
+  display: inline-block;
+  background: beige;
+  max-width: 30rem;
+  padding: 1rem;
+}
+
+.row {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  margin-bottom: 1px;
+}
+
+.cell {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid lightgray;
+}
+
+.cell::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: dimgray;
+  transition: opacity .5s;
+
+  /* .cell width, height + padding * 2 */
+  width: 60px;
+  height: 60px;
+}
+
+.flip::after {
+  opacity: 0;
+}
+
+.done {
+  background: lightgreen;
+}
+
+.finish-text {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+.d-none {
+  display: none;
+}
