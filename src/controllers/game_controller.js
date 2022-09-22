@@ -4,17 +4,17 @@ import printInfo from "../utils/printInfo"
 
 const info = `
   Levels:
-    easy - numbers 1..3
-    medium - numbers 1..6
-    hard - numbers 1..10
+    easy - numbers from 1 to 6
+    medium - numbers from 1 to 10
+    hard - numbers from 1 to 15
 
   Also you can use developer console info tab to see hints`
 
 // game difficulty levels
 const levels = {
-  easy: { rows: 2, cols: 3 },
-  medium: { rows: 3, cols: 4 },
-  hard: { rows: 4, cols: 5 }
+  easy: { rows: 3, cols: 4 },
+  medium: { rows: 4, cols: 5 },
+  hard: { rows: 5, cols: 6 }
 }
 
 export default class extends Controller {
@@ -181,7 +181,13 @@ export default class extends Controller {
       )
     } else {
       // fail
-      this.open.classList.remove("flip")
+      elem.classList.add("flip")
+      let open = this.open
+      setTimeout(() => {
+        elem.classList.remove("flip")
+        open.classList.remove("flip")
+      }, 350)
+
       this.open = null
     }
   }

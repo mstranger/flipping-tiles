@@ -1,5 +1,7 @@
 /*
   Returns shuffled collection
+
+  @param {collection} arr
 */
 export default function shuffle(arr) {
   const len = arr.length
