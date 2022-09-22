@@ -39,19 +39,19 @@ body {
 
 .row {
   display: flex;
-  gap: 2px;
+  gap: 0.125rem;
   justify-content: center;
-  margin-bottom: 1px;
+  margin-bottom: 0.125rem;
 }
 
 .cell {
   position: relative;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
+  width: 3.125rem;
+  height: 3.125rem;
+  line-height: 3.125rem;
   text-align: center;
-  padding: 5px;
-  border: 1px solid lightgray;
+  padding: 0.3125rem;
+  border: 0.0625rem solid lightgray;
 }
 
 .cell::after {
@@ -61,8 +61,8 @@ body {
   left: 0;
   background-color: dimgray;
   transition: opacity 0.5s;
-  width: 60px;
-  height: 60px;
+  width: 3.75rem;
+  height: 3.75rem;
 }
 
 .flip::after {
