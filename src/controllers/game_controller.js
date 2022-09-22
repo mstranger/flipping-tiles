@@ -2,6 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 import shuffle from "../utils/shuffle"
 import printInfo from "../utils/printInfo"
 
+const info = `
+  Levels:
+    easy - numbers 1..3
+    medium - numbers 1..6
+    hard - numbers 1..10
+
+  Also you can use developer console info tab to see hints`
+
 // game difficulty levels
 const levels = {
   easy: { rows: 2, cols: 3 },
@@ -10,7 +18,7 @@ const levels = {
 }
 
 export default class extends Controller {
-  static targets = ["board", "reset", "level"]
+  static targets = ["board", "reset", "level", "info"]
 
   static values = {
     gameStarted: Boolean,
@@ -35,6 +43,7 @@ export default class extends Controller {
     this.levelTarget.addEventListener("change", e => {
       this.levelValue = e.target.value
     })
+    this.infoTarget.setAttribute("title", info.slice(1))
   }
 
   disconnect() {

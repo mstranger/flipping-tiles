@@ -9,7 +9,9 @@
   <body>
     <div class="container" data-controller="game">
       <div>
-        <label for="level" class="d-block">Select difficulty level:</label>
+        <span class="info-note" data-game-target="info">&ast;</span>
+        <label for="level" class="d-block" style="display: inline-block;">Select difficulty level:</label>
+        <br>
         <select class="level" id="level" data-game-target="level" data-game-level-value="easy">
           <option value="easy">easy</option>
           <option value="medium" selected>medium</option>

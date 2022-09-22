@@ -14,11 +14,17 @@ body {
   margin: 0.65rem 0.1rem;
 }
 
+.info-note {
+  cursor: pointer;
+  color: royalblue;
+}
+
 .board {
   position: relative;
   display: inline-block;
   background: beige;
   max-width: 30rem;
+  margin-top: 0.5rem;
   padding: 0.5rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
@@ -59,6 +65,7 @@ body {
 
 .done {
   background: lightgreen;
+  transition: background-color 0.3s;
 }
 
 .finish-text {
