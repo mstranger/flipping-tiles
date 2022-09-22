@@ -15,7 +15,7 @@ body {
 }
 
 .info-note {
-  cursor: pointer;
+  cursor: help;
   color: royalblue;
 }
 
@@ -61,8 +61,6 @@ body {
   left: 0;
   background-color: dimgray;
   transition: opacity 0.5s;
-
-  /* .cell width, height + padding * 2 */
   width: 60px;
   height: 60px;
 }
