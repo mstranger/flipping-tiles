@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <title>Flipper</title>
     <link rel="stylesheet" href="main.css" />
     <script src="bundle.js" async></script>
   </head>
@@ -24,6 +25,10 @@
         <p class="finish-text">
           <a href="#" class="reset-link" data-action="game#resetGame">Click</a> to reset board
         </p>
+      </div>
+
+      <div class="timer d-none">
+        Spent Time: <span data-game-target="timer"></span> seconds
       </div>
     </div>
   </body>

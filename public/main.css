@@ -19,6 +19,14 @@ body {
   color: royalblue;
 }
 
+.timer {
+  color: dimgray;
+}
+
+.timer > span {
+  color: initial;
+}
+
 .board {
   position: relative;
   display: inline-block;

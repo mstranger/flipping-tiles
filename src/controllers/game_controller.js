@@ -18,7 +18,7 @@ const levels = {
 }
 
 export default class extends Controller {
-  static targets = ["board", "reset", "level", "info"]
+  static targets = ["board", "reset", "level", "info", "timer"]
 
   static values = {
     gameStarted: Boolean,
@@ -28,6 +28,7 @@ export default class extends Controller {
 
   initialize() {
     this.open = null
+    this.timer = null
   }
 
   get hasOpenCell() {
@@ -66,9 +67,11 @@ export default class extends Controller {
   }
 
   numbersValueChanged(value, previousValue) {
-    // all numbers are open
+    // all cells are open
     if (previousValue && value.length === 0) {
-      this.resetTarget.classList.remove("d-none")
+      let spent = (new Date().getTime() - this.timer) / 1000
+      this.timerTarget.parentNode.classList.remove("d-none")
+      this.timerTarget.textContent = spent.toFixed(2)
     }
   }
 
@@ -98,6 +101,7 @@ export default class extends Controller {
     this.initialize()
     this.gameStartedValue = false
     this.resetTarget.classList.add("d-none")
+    this.timerTarget.parentNode.classList.add("d-none")
   }
 
   /*
@@ -158,6 +162,8 @@ export default class extends Controller {
   // toggle game state and display reset link
   checkGameStarted() {
     if (!this.gameStartedValue) {
+      this.timer = new Date().getTime()
+
       this.gameStartedValue = true
       this.resetTarget.classList.remove("d-none")
     }
