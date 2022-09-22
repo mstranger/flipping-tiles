@@ -1,3 +1,6 @@
+/*
+  Returns shuffled collection
+*/
 export default function shuffle(arr) {
   const len = arr.length
   const result = []

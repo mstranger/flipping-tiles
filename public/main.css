@@ -1,5 +1,7 @@
 body {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.1rem;
+  background-color: #fff;
 }
 
 .container {
@@ -7,13 +9,18 @@ body {
   text-align: center;
 }
 
+.level {
+  padding: 0.25rem;
+  margin: 0.65rem 0.1rem;
+}
+
 .board {
   position: relative;
   display: inline-block;
   background: beige;
   max-width: 30rem;
-  padding: 1rem;
-  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  padding: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
 .row {
@@ -39,7 +46,7 @@ body {
   top: 0;
   left: 0;
   background-color: dimgray;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 
   /* .cell width, height + padding * 2 */
   width: 60px;
@@ -60,6 +67,15 @@ body {
   font-size: 1.1rem;
 }
 
+.d-block {
+  display: block;
+}
+
 .d-none {
   display: none;
+}
+
+.reset-link {
+  text-decoration: none;
+  color: royalblue;
 }

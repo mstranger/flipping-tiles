@@ -1,23 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
 import shuffle from "../utils/shuffle"
+import printInfo from "../utils/printInfo"
+
+// game difficulty levels
+const levels = {
+  easy: { rows: 2, cols: 3 },
+  medium: { rows: 3, cols: 4 },
+  hard: { rows: 4, cols: 5 }
+}
 
 export default class extends Controller {
-  static targets = ["board", "finishMessage"]
-  static values = { numbers: Array }
+  static targets = ["board", "reset", "level"]
+
+  static values = {
+    gameStarted: Boolean,
+    level: { type: String, default: "medium" },
+    numbers: Array
+  }
 
   initialize() {
-    this.rows = 2
-    this.cols = 3
-    this.numbersValue = [...Array(this.cellsNumber / 2 + 1).keys()].slice(1)
     this.open = null
-  }
-
-  connect() {
-    this.boardTarget.appendChild(this.createBoard())
-  }
-
-  get cellsNumber() {
-    return this.rows * this.cols
   }
 
   get hasOpenCell() {
@@ -28,19 +30,45 @@ export default class extends Controller {
     callbacks
   */
 
+  connect() {
+    console.debug("connected...")
+    this.levelTarget.addEventListener("change", e => {
+      this.levelValue = e.target.value
+    })
+  }
+
+  disconnect() {
+    console.debug("disconnected...")
+  }
+
+  gameStartedValueChanged(newValue, prev) {
+    // disable difficulty level if game has started
+    if (newValue) this.levelTarget.disabled = true
+
+    // reset all if game has started
+    if (prev && !newValue) {
+      this.levelTarget.disabled = false
+      this.render()
+    }
+  }
+
+  levelValueChanged() {
+    this.render()
+  }
+
   numbersValueChanged(value, previousValue) {
-    // game is over
+    // all numbers are open
     if (previousValue && value.length === 0) {
-      let messageElem = this.finishMessageTarget
-      messageElem.classList.remove("d-none")
+      this.resetTarget.classList.remove("d-none")
     }
   }
 
   /*
-    handlers
+    actions
   */
 
-  handleClick(e) {
+  // process click on cell elements
+  handleCellClick(e) {
     let elem = e.target
 
     if (this.wrongTarget(elem)) return
@@ -48,46 +76,68 @@ export default class extends Controller {
     if (this.hasOpenCell) {
       this.checkGuess(elem)
     } else {
+      this.checkGameStarted()
       elem.classList.add("flip")
       this.open = elem
     }
+  }
+
+  // reset board and start new game
+  resetGame(e) {
+    e.preventDefault()
+
+    this.initialize()
+    this.gameStartedValue = false
+    this.resetTarget.classList.add("d-none")
   }
 
   /*
     private methods
   */
 
-  createBoard() {
+  render() {
+    const { rows, cols } = levels[this.levelTarget.value]
+
+    this.boardTarget.innerHTML = ""
+    this.boardTarget.appendChild(this.createBoard(rows, cols))
+  }
+
+  // returns board with shuffled numbers as DOM element
+  createBoard(rows, cols) {
+    this.numbersValue = [...Array((rows * cols) / 2 + 1).keys()].slice(1)
+
     const data = shuffle([...this.numbersValue, ...this.numbersValue])
     const board = document.createElement("div")
-    board.setAttribute("data-action", "click->game#handleClick")
+    board.setAttribute("data-action", "click->game#handleCellClick")
     board.classList.add("board")
 
-    console.info(data)
+    printInfo(data, rows, cols)
 
-    for (let i = 0; i < this.rows; i++) {
-      let row = document.createElement("div")
+    for (let i = 0; i < rows; i++) {
+      const row = document.createElement("div")
       row.classList.add("row")
-
-      this.createAndInsertCell(row, data)
-
-      console.info(data)
-
+      this.createCells(cols, data).forEach(cell => row.appendChild(cell))
       board.appendChild(row)
     }
 
     return board
   }
 
-  createAndInsertCell(row, data) {
-    for (let j = 0; j < this.cols; j++) {
+  // returns array of DOM elements
+  createCells(cols, data) {
+    let cells = []
+
+    for (let j = 0; j < cols; j++) {
       let cell = document.createElement("div")
       cell.classList.add("cell")
       cell.textContent = data.shift()
-      row.appendChild(cell)
+      cells.push(cell)
     }
+
+    return cells
   }
 
+  // returns true if clicked elem isn't correct cell
   wrongTarget(elem) {
     return (
       !elem.classList.contains("cell") ||
@@ -96,6 +146,15 @@ export default class extends Controller {
     )
   }
 
+  // toggle game state and display reset link
+  checkGameStarted() {
+    if (!this.gameStartedValue) {
+      this.gameStartedValue = true
+      this.resetTarget.classList.remove("d-none")
+    }
+  }
+
+  // compare two flipped cells
   checkGuess(elem) {
     if (this.open.textContent === elem.textContent) {
       // success

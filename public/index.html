@@ -8,12 +8,19 @@
 
   <body>
     <div class="container" data-controller="game">
+      <div>
+        <label for="level" class="d-block">Select difficulty level:</label>
+        <select class="level" id="level" data-game-target="level" data-game-level-value="easy">
+          <option value="easy">easy</option>
+          <option value="medium" selected>medium</option>
+          <option value="hard">hard</option>
+        </select>
+      </div>
       <div data-game-target="board"></div>
 
-      <div class="d-none" data-game-target="finishMessage">
+      <div class="d-none" data-game-target="reset">
         <p class="finish-text">
-          Done! Try again?<br />
-          <a href="#">yes</a>&nbsp;/&nbsp;no
+          <a href="#" class="reset-link" data-action="game#resetGame">Click</a> to reset board
         </p>
       </div>
     </div>
