@@ -1,47 +1,16 @@
-body {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  font-size: 1.1rem;
-  background-color: #fff;
-}
-
-.container {
-  margin-top: 3rem;
-  text-align: center;
-}
-
-.level {
-  padding: 0.25rem;
-  margin: 0.65rem 0.1rem;
-}
+@import "vendor/bootstrap.min.css";
 
 .info-note {
   cursor: help;
   color: royalblue;
 }
 
-.timer {
-  color: dimgray;
+.w-10 {
+  width: 10rem;
 }
 
-.timer > span {
-  color: initial;
-}
-
-.board {
-  position: relative;
-  display: inline-block;
-  background: beige;
-  max-width: 30rem;
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-}
-
-.row {
-  display: flex;
-  gap: 0.125rem;
-  justify-content: center;
-  margin-bottom: 0.125rem;
+.self-center {
+  margin: 0 auto;
 }
 
 .cell {
@@ -50,8 +19,10 @@ body {
   height: 3.125rem;
   line-height: 3.125rem;
   text-align: center;
-  padding: 0.3125rem;
   border: 0.0625rem solid lightgray;
+  color: black;
+  font-size: 1.1rem;
+  background: #f8f9fa;
 }
 
 .cell::after {
@@ -59,10 +30,10 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: dimgray;
+  background-color: #6c757d;
   transition: opacity 0.5s;
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 .flip::after {
@@ -70,25 +41,6 @@ body {
 }
 
 .done {
-  background: lightgreen;
+  background: #a3cfbb;
   transition: background-color 0.3s;
-}
-
-.finish-text {
-  text-align: center;
-  padding: 1rem;
-  font-size: 1.1rem;
-}
-
-.d-block {
-  display: block;
-}
-
-.d-none {
-  display: none;
-}
-
-.reset-link {
-  text-decoration: none;
-  color: royalblue;
 }

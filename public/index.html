@@ -9,26 +9,30 @@
 
   <body>
     <div class="container" data-controller="game">
-      <div>
-        <span class="info-note" data-game-target="info">&ast;</span>
-        <label for="level" class="d-block" style="display: inline-block;">Select difficulty level:</label>
-        <br>
-        <select class="level" id="level" data-game-target="level" data-game-level-value="easy">
-          <option value="easy">easy</option>
-          <option value="medium" selected>medium</option>
-          <option value="hard">hard</option>
-        </select>
-      </div>
-      <div data-game-target="board"></div>
+      <div class="text-center mt-5">
+        <div>
+          <label for="diff-level">Select difficulty level
+            <span class="info-note" data-game-target="info">&ast;</span>
+          </label>
+          <select id="diff-level"
+              class="form-select form-select-sm rounded-0 w-10 mt-3 mb-4 self-center"
+              data-game-target="level" data-game-level-value="easy">
+            <option value="easy">easy</option>
+            <option value="medium" selected>medium</option>
+            <option value="hard">hard</option>
+          </select>
+        </div>
 
-      <div class="d-none" data-game-target="reset">
-        <p class="finish-text">
-          <a href="#" class="reset-link" data-action="game#resetGame">Click</a> to reset board
-        </p>
-      </div>
+        <div data-game-target="board"></div>
 
-      <div class="timer d-none">
-        Spent Time: <span data-game-target="timer"></span> seconds
+        <div class="d-none my-4" data-game-target="reset">
+          <a href="#" class="reset-link text-decoration-none" data-action="game#resetGame">Click</a>
+          to reset board
+        </div>
+
+        <div class="d-none text-muted">
+          Spent Time: <span data-game-target="timer" class="text-dark"></span> seconds
+        </div>
       </div>
     </div>
   </body>

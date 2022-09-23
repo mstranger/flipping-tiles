@@ -128,7 +128,7 @@ export default class extends Controller {
 
     for (let i = 0; i < rows; i++) {
       const row = document.createElement("div")
-      row.classList.add("row")
+      row.classList.add("d-flex", "gap-1", "mb-1", "justify-content-center")
       this.createCells(cols, data).forEach(cell => row.appendChild(cell))
       board.appendChild(row)
     }
@@ -142,7 +142,7 @@ export default class extends Controller {
 
     for (let j = 0; j < cols; j++) {
       let cell = document.createElement("div")
-      cell.classList.add("cell")
+      cell.classList.add("cell", "shadow")
       cell.textContent = data.shift()
       cells.push(cell)
     }
