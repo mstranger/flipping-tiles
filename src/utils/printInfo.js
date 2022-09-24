@@ -1,10 +1,4 @@
-/*
-  Displays given collection in the console with <info> label
-
-  @param {collection} data
-  @param {number} rows
-  @param {number} cols
-*/
+// print given collection in the console
 export default function printInfo(data, rows, cols) {
   let result = []
 
