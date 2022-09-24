@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import shuffle from "../utils/shuffle"
-import printInfo from "../utils/printInfo"
+import Board from "../modules/board"
 import rules from "../utils/rules"
 import levels from "../utils/levels"
 
@@ -53,15 +52,6 @@ export default class extends Controller {
     this.render()
   }
 
-  numbersValueChanged(value, previousValue) {
-    // all cells are open
-    if (previousValue && value.length === 0) {
-      let spent = (new Date().getTime() - this.timer) / 1000
-      this.timerTarget.parentNode.classList.remove("d-none")
-      this.timerTarget.textContent = spent.toFixed(2)
-    }
-  }
-
   /*
     actions
   */
@@ -75,7 +65,7 @@ export default class extends Controller {
     if (this.hasOpenCell) {
       this.checkGuess(elem)
     } else {
-      this.checkGameStarted()
+      this.checkGameState()
       elem.classList.add("flip")
       this.open = elem
     }
@@ -92,49 +82,14 @@ export default class extends Controller {
   }
 
   /*
-    private methods
+    other methods
   */
 
   render() {
     const { rows, cols } = levels[this.levelTarget.value]
 
     this.boardTarget.innerHTML = ""
-    this.boardTarget.appendChild(this.createBoard(rows, cols))
-  }
-
-  // returns board with shuffled numbers as DOM element
-  createBoard(rows, cols) {
-    this.numbersValue = [...Array((rows * cols) / 2 + 1).keys()].slice(1)
-
-    const data = shuffle([...this.numbersValue, ...this.numbersValue])
-    const board = document.createElement("div")
-    board.setAttribute("data-action", "click->game#handleCellClick")
-    board.classList.add("board")
-
-    printInfo(data, rows, cols)
-
-    for (let i = 0; i < rows; i++) {
-      const row = document.createElement("div")
-      row.classList.add("d-flex", "gap-1", "mb-1", "justify-content-center")
-      this.createCells(cols, data).forEach(cell => row.appendChild(cell))
-      board.appendChild(row)
-    }
-
-    return board
-  }
-
-  // returns array of DOM elements
-  createCells(cols, data) {
-    let cells = []
-
-    for (let j = 0; j < cols; j++) {
-      let cell = document.createElement("div")
-      cell.classList.add("cell", "shadow")
-      cell.textContent = data.shift()
-      cells.push(cell)
-    }
-
-    return cells
+    this.boardTarget.appendChild(Board.create(rows, cols))
   }
 
   // returns true if clicked elem isn't correct cell
@@ -147,7 +102,7 @@ export default class extends Controller {
   }
 
   // toggle game state and display reset link
-  checkGameStarted() {
+  checkGameState() {
     if (!this.gameStartedValue) {
       this.timer = new Date().getTime()
 
@@ -163,9 +118,7 @@ export default class extends Controller {
       elem.classList.add("flip", "done")
       this.open.classList.add("done")
       this.open = null
-      this.numbersValue = this.numbersValue.filter(
-        n => n !== Number(elem.textContent)
-      )
+      this.checkGameFinish()
     } else {
       // fail
       elem.classList.add("flip")
@@ -176,6 +129,15 @@ export default class extends Controller {
       }, 350)
 
       this.open = null
+    }
+  }
+
+  // check if the current game is over
+  checkGameFinish() {
+    if (Board.allCellsFlipped(this.boardTarget)) {
+      const spent = (new Date().getTime() - this.timer) / 1000
+      this.timerTarget.parentNode.classList.remove("d-none")
+      this.timerTarget.textContent = spent.toFixed(2)
     }
   }
 }
